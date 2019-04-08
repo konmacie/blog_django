@@ -31,7 +31,6 @@ class Post(models.Model):
     text = models.TextField()
     date_pub = models.DateTimeField(
         verbose_name='Publication date',
-        default=None,
         blank=True, null=True)
     date_edit = models.DateTimeField(
         verbose_name='Last edited',
@@ -40,6 +39,18 @@ class Post(models.Model):
     class Meta:
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
+
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'pk': self.pk})
+
+    def get_status(self):
+        '''
+        Return status as string from Post._STATUS_CHOICES
+        '''
+        return self._STATUS_CHOICES[self.status][1]
+
+    def __str__(self):
+        return str(self.title)
 
 
 class Comment(models.Model):
@@ -62,3 +73,6 @@ class Comment(models.Model):
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'
         ordering = ['-date_pub']
+
+    def __str__(self):
+        return str(self.name) + " (" + str(self.date_pub) + ")"

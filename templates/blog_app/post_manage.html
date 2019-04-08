@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    
+    <h2>{{ post.title }}</h2>
+    
+    <strong>Published on: </strong>{{ post.date_pub }}<br>
+    <strong>Status:</strong> {{ post.get_status }}<br>
+    <div>
+        <ul>
+            <a href=""><li>Edit</li></a>
+        {% if post.status == post.STATUS_DRAFT %}
+            <a href=""><li>Publish</li></a>
+        {% endif %}
+        {% if post.status == post.STATUS_PUBLISHED %}
+            <a href=""><li>Archivate</li></a>
+        {% endif %}
+        {% if post.status == post.STATUS_ARCHIVED %}
+            <a href=""><li>Republish</li></a>
+        {% endif %}
+            <a href=""><li>Delete</li></a>
+        </ul>
+    </div>
+    <div>
+        {{ post.text|linebreaks|truncatechars_html:200 }}
+    </div>
+    
+    
+        
+{% endblock content %}
+    

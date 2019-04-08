@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    
+    {% for post in posts %}
+        <a href="{{ post.get_absolute_url }}"><h2>{{ post.title }}</h2></a>
+        
+        {% if post.author %}
+            <i>by {{ post.author }} </i>
+        {% else %}
+            <i>by unknown </i>
+        {% endif %}
+        on {{ post.date_pub }}
+        
+        <div>
+            {{ post.text|linebreaks }}
+        </div>
+    {% empty %}
+        <h2>Sorry, no posts yet!</h2>
+    {% endfor %}
+
+    {% include 'pagination.html' %}
+        
+{% endblock content %}
+    
