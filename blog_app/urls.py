@@ -13,6 +13,10 @@ urlpatterns = [
          name='post_new'),
     path('post/<int:pk>/manage/', views.PostManageView.as_view(),
          name='post_manage'),
+    path('post/<int:pk>/manage/<str:action>/', views.post_action_view,
+         name='post_manage_action'),
+    path('archive/<int:pk>/', views.ArchiveDetailView.as_view(),
+         name='archive_detail'),
     ########################
     # Authentication views #
     ########################

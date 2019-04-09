@@ -11,15 +11,15 @@
         <ul>
             <a href=""><li>Edit</li></a>
         {% if post.status == post.STATUS_DRAFT %}
-            <a href=""><li>Publish</li></a>
+            <a href="{% url 'post_manage_action' post.pk 'publish' %}"><li>Publish</li></a>
         {% endif %}
         {% if post.status == post.STATUS_PUBLISHED %}
-            <a href=""><li>Archivate</li></a>
+            <a href="{% url 'post_manage_action' post.pk 'archivate' %}"><li>Archivate</li></a>
         {% endif %}
         {% if post.status == post.STATUS_ARCHIVED %}
-            <a href=""><li>Republish</li></a>
+            <a href="{% url 'post_manage_action' post.pk 'republish' %}"><li>Republish</li></a>
         {% endif %}
-            <a href=""><li>Delete</li></a>
+            <a href="{% url 'post_manage_action' post.pk 'delete' %}"><li>Delete</li></a>
         </ul>
     </div>
     <div>
