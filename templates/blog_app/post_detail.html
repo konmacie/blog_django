@@ -24,7 +24,7 @@
     <h3>Comments:</h3>
     
     {% if post.status == post.STATUS_PUBLISHED %}
-        <a href="">Add comment</a>
+        <a href="{% url 'comment_add' post.pk %}">Add comment</a>
     {% endif %}
         
     {% for comment in post.comments.all %}

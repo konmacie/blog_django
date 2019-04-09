@@ -50,6 +50,40 @@ class PostDetailView(DetailView):
         return queryset
 
 
+class CommentAddView(SuccessMessageMixin, CreateView):
+    model = Comment
+    fields = ['name', 'text']
+    success_message = "Comment added successfully!"
+
+    def dispatch(self, request, *args, **kwargs):
+        '''
+        Overridden to check if selected post exists and is published
+        '''
+        self.selected_post = get_object_or_404(
+            Post, pk=kwargs['post_pk'], status=Post.STATUS_PUBLISHED)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        '''
+        Add selected post to templates context
+        '''
+        context = super().get_context_data(**kwargs)
+        context['post'] = self.selected_post
+        return context
+
+    def form_valid(self, form):
+        form.instance.post = self.selected_post
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.selected_post.get_absolute_url()
+
+
+##################################
+# Views requiring authentication #
+##################################
+
+
 class PostCreateDraftView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'text']
@@ -59,6 +93,35 @@ class PostCreateDraftView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # set instance's author field to currently logged in user
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
+class DraftListView(LoginRequiredMixin, ListView):
+    '''
+    Show User's posts with STATUS_DRAFT
+    '''
+    model = Post
+    template_name = 'blog_app/draft_list.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = user.posts.filter(status=Post.STATUS_DRAFT)
+        return queryset
+
+
+class PostUpdateView(SuccessMessageMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title', 'text']
+    success_message = "Post updated successfully!"
+
+    def test_func(self):
+        '''
+        Check if logged-in user is Post's author
+        '''
+        post = self.get_object()
+        user = self.request.user
+        return post.author == user
 
 
 class ArchiveDetailView(DetailView):

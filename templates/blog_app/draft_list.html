@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h2>My drafts:</h2>
+    {% for post in posts %}
+        <a href="{{ post.get_absolute_url }}"><h3>{{ post.title }}</h3></a>
+        <div>
+            {{ post.text|linebreaks }}
+        </div>
+    {% empty %}
+        <h2>Sorry, no posts yet!</h2>
+    {% endfor %}
+
+    {% include 'pagination.html' %}
+        
+{% endblock content %}
+    

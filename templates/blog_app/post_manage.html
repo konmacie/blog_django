@@ -9,7 +9,7 @@
     <strong>Status:</strong> {{ post.get_status }}<br>
     <div>
         <ul>
-            <a href=""><li>Edit</li></a>
+            <a href="{% url 'post_edit' post.pk %}"><li>Edit</li></a>
         {% if post.status == post.STATUS_DRAFT %}
             <a href="{% url 'post_manage_action' post.pk 'publish' %}"><li>Publish</li></a>
         {% endif %}
