@@ -63,7 +63,7 @@ class Post(models.Model):
     ################################
     def publish(self):
         '''
-        Set Post's status to published, 
+        Set Post's status to published,
         set Post's date_pub to timezone.now()
         '''
         if self.status != Post.STATUS_DRAFT:
