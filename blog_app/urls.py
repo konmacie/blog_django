@@ -24,15 +24,13 @@ urlpatterns = [
          name='post_manage_action'),
     path('archive/<int:pk>/', views.ArchiveDetailView.as_view(),
          name='archive_detail'),
-    path('my-drafts/', views.DraftListView.as_view(),
-         name='my_drafts'),
+    path('my-posts/', views.UserPostList.as_view(),
+         name='user_posts', kwargs={'status': 'published'}),
+    path('my-posts/<str:status>/', views.UserPostList.as_view(),
+         name='user_posts_status'),
     ########################
     # Authentication views #
     ########################
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
-
-# TODO:
-#   archive list
-#   my published posts

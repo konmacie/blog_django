@@ -110,6 +110,40 @@ class DraftListView(LoginRequiredMixin, ListView):
         return queryset
 
 
+class UserPostList(LoginRequiredMixin, ListView):
+    '''
+    Show User's post with given status
+    '''
+    model = Post
+    template_name = 'blog_app/user_post_list.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        # get status from url kwargs
+        status_url = self.kwargs['status']
+
+        # map status given in url with Post's statuses
+        status_map = {
+            'draft': Post.STATUS_DRAFT,
+            'published': Post.STATUS_PUBLISHED,
+            'archived': Post.STATUS_ARCHIVED,
+        }
+
+        status = status_map.get(status_url, None)
+
+        # raise 404 if given wrong status
+        if status is None:
+            raise Http404
+
+        queryset = Post.objects.filter(
+            author=self.request.user,
+            status=status
+        ).order_by('-date_edit')
+
+        return queryset
+
+
 class PostUpdateView(SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title', 'text']

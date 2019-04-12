@@ -15,8 +15,8 @@
     <ul>
     {% if user.is_authenticated %}
         <li><a href="{% url 'logout' %}">Logout</a></li>
-        <li><a href="{% url 'post_new' %}">New Post</a></li>
-        <li><a href="{% url 'my_drafts' %}">My drafts</a></li>
+        <li><a href="{% url 'post_new' %}">New post</a></li>
+        <li><a href="{% url 'user_posts' %}">My posts</a></li>
     {% else %}
         <li><a href="{% url 'login'%}">Login</a></li>
     {% endif %}

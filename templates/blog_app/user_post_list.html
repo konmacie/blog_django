@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <ul>
+        <li><a href="{% url 'user_posts_status' 'draft' %}">Drafts</a></li>
+        <li><a href="{% url 'user_posts_status' 'published' %}">Published</a></li>
+        <li><a href="{% url 'user_posts_status' 'archived' %}">Archived</a></li>
+    </ul>
+    <h2>My {{ view.kwargs.status }} posts:</h2>
+    {% for post in posts %}
+        <a href="{{ post.get_absolute_url }}"><h3>{{ post.title }}</h3></a>
+        <p>
+            Edited: {{ post.date_edit }} <br>
+            Published: {{ post.date_pub }}
+        </p>
+    {% empty %}
+        <h2>Sorry, no posts yet!</h2>
+    {% endfor %}
+
+    {% include 'pagination.html' %}
+        
+{% endblock content %}
+    
