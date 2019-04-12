@@ -22,12 +22,14 @@ urlpatterns = [
          name='post_edit'),
     path('post/<int:pk>/manage/<str:action>/', views.post_action_view,
          name='post_manage_action'),
-    path('archive/<int:pk>/', views.ArchiveDetailView.as_view(),
-         name='archive_detail'),
     path('my-posts/', views.UserPostList.as_view(),
          name='user_posts', kwargs={'status': 'published'}),
     path('my-posts/<str:status>/', views.UserPostList.as_view(),
          name='user_posts_status'),
+    path('archive/', views.ArchiveListView.as_view(),
+         name='archive_list'),
+    path('archive/<int:pk>/', views.ArchiveDetailView.as_view(),
+         name='archive_detail'),
     ########################
     # Authentication views #
     ########################

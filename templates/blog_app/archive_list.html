@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h2>Archived posts:</h2>
+    {% for post in posts %}
+        <a href="{{ post.get_absolute_url }}"><h3>{{ post.title }}</h3></a>
+        <p>
+            {% if post.author %}
+                <i>by {{ post.author }} </i>
+            {% else %}
+                <i>by unknown </i>
+            {% endif %}
+            on {{ post.date_pub }}
+        </p>
+    {% empty %}
+        <h2>Sorry, no posts yet!</h2>
+    {% endfor %}
+
+    {% include 'pagination.html' %}
+        
+{% endblock content %}
+    

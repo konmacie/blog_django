@@ -62,6 +62,10 @@ class Post(models.Model):
     # Actions for post_action_view #
     ################################
     def publish(self):
+        '''
+        Set Post's status to published, 
+        set Post's date_pub to timezone.now()
+        '''
         if self.status != Post.STATUS_DRAFT:
             raise PermissionDenied
         self.status = Post.STATUS_PUBLISHED
@@ -69,12 +73,19 @@ class Post(models.Model):
         self.save()
 
     def archivate(self):
+        '''
+        Set Post's status to archived
+        '''
         if self.status != Post.STATUS_PUBLISHED:
             raise PermissionDenied
         self.status = Post.STATUS_ARCHIVED
         self.save()
 
     def republish(self):
+        '''
+        Set Post's status to published,
+        doesn't change Post's date_pub
+        '''
         if self.status != Post.STATUS_ARCHIVED:
             raise PermissionDenied
         self.status = Post.STATUS_PUBLISHED

@@ -158,6 +158,23 @@ class PostUpdateView(SuccessMessageMixin, UserPassesTestMixin, UpdateView):
         return post.author == user
 
 
+class ArchiveListView(LoginRequiredMixin, ListView):
+    '''
+    Show archived post. Requires authentication.
+    '''
+    model = Post
+    context_object_name = 'posts'
+    paginate_by = 10
+    template_name = 'blog_app/archive_list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset\
+            .filter(status=Post.STATUS_ARCHIVED)\
+            .order_by('-date_pub')
+        return queryset
+
+
 class ArchiveDetailView(DetailView):
     model = Post
     context_object_name = 'post'
@@ -189,6 +206,9 @@ class PostManageView(UserPassesTestMixin, DetailView):
 
 @login_required
 def post_action_view(request, pk, action):
+    '''
+    Perform given action on Post object.
+    '''
 
     post = get_object_or_404(Post, pk=pk)
 
