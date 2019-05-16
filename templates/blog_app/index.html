@@ -1,26 +1,33 @@
 {% extends 'base.html' %}
 
 
-{% block content %}
+{% block content_block %}
+
     
     {% for post in posts %}
-        <a href="{{ post.get_absolute_url }}"><h2>{{ post.title }}</h2></a>
-        
-        {% if post.author %}
-            <i>by {{ post.author }} </i>
-        {% else %}
-            <i>by unknown </i>
-        {% endif %}
-        on {{ post.date_pub }}
-        
-        <div>
-            {{ post.text|linebreaks }}
-        </div>
+        <article class="blog-box">
+            <a href="{{ post.get_absolute_url }}">
+                <h2>{{ post.title }}</h2>
+            </a>
+            {% if post.author %}
+                by <i>{{ post.author }}</i>
+            {% else %}
+                by <i>unknown</i>
+            {% endif %}
+            on {{ post.date_pub }}
+            <hr>
+            <div>
+                {{ post.text|linebreaks|truncatechars_html:1000 }}
+            </div>
+            <div style="text-align: right">
+                <a href="{{ post.get_absolute_url }}#comments">Comments ({{ post.comments_num }})</a>
+            </div>
+        </article>
     {% empty %}
         <h2>Sorry, no posts yet!</h2>
     {% endfor %}
 
     {% include 'pagination.html' %}
         
-{% endblock content %}
+{% endblock content_block %}
     

@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'index' %}">My Blog</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar" style="clear: both">
+        <ul class="navbar-nav w-100">
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contact</a>
+            </li>
+            
+            {% if user.is_authenticated %}
+                <li class="nav-item dropdown ml-auto">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        {{ user }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'post_new' %}"><i class="fas fa-file-alt"></i> New post</a>
+                        <a class="dropdown-item" href="{% url 'user_posts' %}"><i class="fas fa-folder-open"></i> My posts</a>
+                        <a class="dropdown-item" href="{% url 'archive_list' %}"><i class="fas fa-archive"></i> Archive</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item ml-auto">
+                    <a class="nav-link" href="{% url 'login' %}">Login <i class="fas fa-sign-in-alt"></i></a>
+                </li>
+            {% endif %}
+                
+            
+            
+        </ul>
+    </div>
+</nav>

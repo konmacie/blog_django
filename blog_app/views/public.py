@@ -10,6 +10,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404, HttpResponseForbidden
 from django.urls import reverse, reverse_lazy
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count
 
 from blog_app.models import Post, Comment
 
@@ -31,7 +32,8 @@ class IndexView(ListView):
         queryset = queryset\
             .filter(status=Post.STATUS_PUBLISHED)\
             .select_related('author')\
-            .order_by('-date_pub')
+            .order_by('-date_pub')\
+            .annotate(comments_num=Count('comments'))
         return queryset
 
 

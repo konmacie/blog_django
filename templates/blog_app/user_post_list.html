@@ -1,24 +1,55 @@
 {% extends 'base.html' %}
 
 
-{% block content %}
-    <ul>
-        <li><a href="{% url 'user_posts_status' 'draft' %}">Drafts</a></li>
-        <li><a href="{% url 'user_posts_status' 'published' %}">Published</a></li>
-        <li><a href="{% url 'user_posts_status' 'archived' %}">Archived</a></li>
+{% block content_block %}
+    <h1>My posts</h1>
+    <ul class="nav nav-tabs nav-fill" style="margin-top: 30px;">
+        <li class="nav-item">
+            <a id="tab-published" class="nav-link" href="{% url 'user_posts_status' 'published' %}">Published</a>
+        </li>
+        <li class="nav-item">
+            <a id="tab-draft" class="nav-link" href="{% url 'user_posts_status' 'draft' %}">Draft</a>
+        </li>
+        <li class="nav-item">
+            <a id="tab-archived" class="nav-link" href="{% url 'user_posts_status' 'archived' %}">Archived</a>
+        </li>
     </ul>
-    <h2>My {{ view.kwargs.status }} posts:</h2>
+
+    <article class="blog-box">
     {% for post in posts %}
-        <a href="{{ post.get_absolute_url }}"><h3>{{ post.title }}</h3></a>
-        <p>
-            Edited: {{ post.date_edit }} <br>
-            Published: {{ post.date_pub }}
-        </p>
+        <div class="card" style="margin-bottom: 30px">
+            <div class="card-body">
+                <h4 class="card-title">{{ post.title }}</h4>
+                <p class="card-text">
+                    {{ post.text|truncatechars_html:300 }}
+                </p>
+                <div class="w-100 text-right">
+                    <a href="{{ post.get_absolute_url }}" class="btn btn-outline-secondary col-md-4">Show</a>
+                    <a href="{% url 'post_manage' post.pk %}" class="btn btn-outline-primary col-md-4">Manage</a>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                Last edit: {{ post.date_edit }}<br>
+                Published: {{ post.date_pub }}
+            </div>
+        </div>
     {% empty %}
-        <h2>Sorry, no posts yet!</h2>
+    <h4 class="alert alert-info" role="alert"><i class="fas fa-info-circle"></i> No posts yet. <a href="{% url 'post_new' %}">Create</a> one!</h4>
     {% endfor %}
+    </article>
 
     {% include 'pagination.html' %}
-        
-{% endblock content %}
+
+
+
+    <script>
+        {% if view.kwargs.status == 'published' %}
+            $("#tab-published").addClass("active");
+        {% elif view.kwargs.status == 'draft' %}
+            $("#tab-draft").addClass("active");
+        {% elif view.kwargs.status == 'archived' %}
+            $("#tab-archived").addClass("active");
+        {% endif %}
+    </script>
+{% endblock content_block %}
     

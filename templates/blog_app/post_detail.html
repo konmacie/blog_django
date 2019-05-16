@@ -1,41 +1,49 @@
 {% extends 'base.html' %}
 
 
-{% block content %}
-    
-    <h2>{{ post.title }}</h2>
-    
-    {% if post.author %}
-        <i>by {{ post.author }} </i>
-    {% else %}
-        <i>by unknown </i>
-    {% endif %}
-    on {{ post.date_pub }}
-    
-    {% if post.author == user %}
-        | <a href="{% url 'post_manage' post.pk %}">Manage</a>
-    {% endif %}
+{% block content_block %}
+    <div class="blog-box">
+        <h2>{{ post.title }}</h2>
+
+        {% if post.author %}
+            <i>by {{ post.author }} </i>
+        {% else %}
+            <i>by unknown </i>
+        {% endif %}
+        on {{ post.date_pub }}
         
-    <div>
-        {{ post.text|linebreaks }}
-    </div>
-    
-    
-    <h3>Comments:</h3>
-    
-    {% if post.status == post.STATUS_PUBLISHED %}
-        <a href="{% url 'comment_add' post.pk %}">Add comment</a>
-    {% endif %}
         
-    {% for comment in post.comments.all %}
+        <hr>
         <div>
-            <b>{{ comment.name }}</b> ({{ comment.date_pub }}):
-            <p>{{ comment.text|linebreaksbr }}</p>
+            {{ post.text|linebreaks }}
         </div>
-    {% empty %}
-        <h4>No comments yet.</h4>
-    {% endfor %}
-        
-        
-{% endblock content %}
+    </div>
+    <div class="blog-box">
+        <h3 id="comments">Comments</h3>
+        <hr>
+        {% if post.status == post.STATUS_PUBLISHED %}
+            <a href="{% url 'comment_add' post.pk %}" class="btn btn-primary btn-block">Add comment</a>
+            <hr>
+        {% endif %}
+        {% for comment in post.comments.all %}
+            <div class="card" style="margin-bottom: 20px">
+                <div class="card-body">
+                    {{ comment.text }}
+                    <div class="blockquote-footer">{{ comment.name }} | {{ comment.date_pub }}</div>
+                </div>
+            </div>
+        {% empty %}
+            <h5 class="alert alert-info" role="alert"><i class="fas fa-info-circle"></i> No comments yet</h5>
+        {% endfor %}
+    </div>
+{% endblock content_block %}
+    
+
+{% block side_panel_block %}
+    {% if post.author == user %}
+        <div style="margin-bottom: 30px">
+            <a href="{% url 'post_manage' post.pk %}" class="btn btn-primary btn-lg btn-block">Manage</a>
+        </div>
+    {% endif %}
+{% endblock side_panel_block %}
     
